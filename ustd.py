@@ -15,9 +15,14 @@ def ustd(x):
     """
     See https://en.wikipedia.org/wiki/Unbiased_estimation_of_standard_deviation#Bias_correction
     """
-    n = x.size
+    # Reshape to handle both 1d and 2d arrays
+    if x.ndim == 1:
+        n = x.size
+        unbiased_variance = np.var(x, ddof=1)
+    else:
+        n = x.shape[1]
+        unbiased_variance = np.var(x, ddof=1, axis=1)
 
-    unbiased_variance = np.var(x, ddof=1)
     unbiased_std = np.sqrt(unbiased_variance) / get_scaling_factor(n)
 
     return unbiased_std
@@ -26,3 +31,8 @@ if __name__ == "__main__":
     assert abs(get_scaling_factor(2) - 0.7978845608) < 1e-6
     assert abs(get_scaling_factor(3) - 0.8862269255) < 1e-6
     assert abs(get_scaling_factor(4) - 0.9213177319) < 1e-6
+    # test that this actually works
+    x = np.random.normal(size=(100000,4))
+    sigma = ustd(x)
+    assert abs(np.mean(sigma) - 1) < 0.005
+
