@@ -23,7 +23,6 @@ def ustd(x):
     return unbiased_std
 
 if __name__ == "__main__":
-    import unittest
     assert abs(get_scaling_factor(2) - 0.7978845608) < 1e-6
     assert abs(get_scaling_factor(3) - 0.8862269255) < 1e-6
     assert abs(get_scaling_factor(4) - 0.9213177319) < 1e-6
